@@ -6,10 +6,13 @@ __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
 def calc_sha(obj):
     """Calculates the base64-encoded SHA hash of a file."""
-    pathfile = path(obj)
+    try:
+        pathfile = path(obj)
+    except UnicodeDecodeError:
+        pathfile = None
     sha = hashlib.sha256()
 
-    if pathfile.exists():
+    if pathfile and pathfile.exists():
         return base64.b64encode(pathfile.read_hash('SHA256'))
     elif isinstance(obj, basestring):
         sha.update(obj)
