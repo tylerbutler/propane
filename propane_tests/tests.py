@@ -23,6 +23,15 @@ class CaseInsensitiveDictTests(TestCase):
         self.cid['Three'] = 3
         self.assertEqual(self.cid['three'], 3)
 
+    def del_test(self):
+        del self.cid['one']
+        self.assertNotIn('One', self.cid)
+        self.assertEqual(len(self.cid), 1)
+
+    def pop_test(self):
+        self.assertIsNotNone(self.cid.pop('two', None))
+        self.assertRaises(KeyError, self.cid.pop, 'pop')
+
 
 class FileToolsTests(TestCase):
     def setUp(self):
