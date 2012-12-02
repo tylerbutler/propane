@@ -4,7 +4,7 @@ import collections
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
-class CaseInsensitiveDict(collections.Mapping):
+class CaseInsensitiveDict(collections.MutableMapping):
     """A dict whose keys are not case-sensitive."""
 
     def __init__(self, d):
@@ -26,6 +26,11 @@ class CaseInsensitiveDict(collections.Mapping):
     def __setitem__(self, key, value):
         self._d[key] = value
         self._s[key.lower()] = key
+
+    def __delitem__(self, key):
+        if key in self._d:
+            del self._d[key]
+        del self._s[key.lower()]
 
     def actual_key_case(self, key):
         return self._s.get(key.lower())

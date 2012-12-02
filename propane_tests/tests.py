@@ -23,24 +23,46 @@ class CaseInsensitiveDictTests(TestCase):
         self.cid['Three'] = 3
         self.assertEqual(self.cid['three'], 3)
 
+    def del_test(self):
+        del self.cid['one']
+        self.assertNotIn('One', self.cid)
+        self.assertEqual(len(self.cid), 1)
+
+    def pop_test(self):
+        self.assertIsNotNone(self.cid.pop('two', None))
+        self.assertRaises(KeyError, self.cid.pop, 'pop')
+
 
 class FileToolsTests(TestCase):
     def setUp(self):
-        self.file = path(__file__).dirname() / '__init__.py'
+        self.text_file = path(__file__).dirname() / 'data/sample_file.txt'
+        self.pdf_file = path(__file__).dirname() / 'data/pdf.pdf'
 
     def file_test(self):
-        sha = calc_sha(self.file)
-        self.assertEqual(sha, 'ch4UW+fLIszntC4GJ6WiqqgGwFlztsVIH/nit7M7P40=')
+        sha = calc_sha(self.text_file)
+        self.assertEqual(sha, 'vT1r++RPA38dW9pHoJR9jJX8SEW4I+XM69Ro2iio8W8=')
+
+        sha = calc_sha(self.pdf_file)
+        self.assertEqual(sha, 'FsSFkVFwNY2F1TYH5t75fgRV7cUgNuZTCjjdHl93+qY=')
 
     def string_test(self):
-        s = open(self.file, mode='rb').read()
+        s = open(self.text_file, mode='rb').read()
         sha = calc_sha(s)
-        self.assertEqual(sha, 'ch4UW+fLIszntC4GJ6WiqqgGwFlztsVIH/nit7M7P40=')
+        self.assertEqual(sha, 'vT1r++RPA38dW9pHoJR9jJX8SEW4I+XM69Ro2iio8W8=')
+
+        s = open(self.pdf_file, mode='rb').read()
+        sha = calc_sha(s)
+        self.assertEqual(sha, 'FsSFkVFwNY2F1TYH5t75fgRV7cUgNuZTCjjdHl93+qY=')
 
     def stream_test(self):
-        with open(self.file, mode='rb') as f:
+        with open(self.text_file, mode='rb') as f:
             sha = calc_sha(f)
-        self.assertEqual(sha, 'ch4UW+fLIszntC4GJ6WiqqgGwFlztsVIH/nit7M7P40=')
+        self.assertEqual(sha, 'vT1r++RPA38dW9pHoJR9jJX8SEW4I+XM69Ro2iio8W8=')
+
+        with open(self.pdf_file, mode='rb') as f:
+            sha = calc_sha(f)
+        self.assertEqual(sha, 'FsSFkVFwNY2F1TYH5t75fgRV7cUgNuZTCjjdHl93+qY=')
+
 
 class StringsTests(TestCase):
     def test_camel_case(self):
