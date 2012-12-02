@@ -1,0 +1,3 @@
+[submodule "propane/distribution"]
+	path = propane/distribution
+	url = https://github.com/tylerbutler/propane-distribution.git
