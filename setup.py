@@ -8,7 +8,8 @@ import os, sys
 from fnmatch import fnmatchcase
 from distutils.util import convert_path
 from setuptools import setup, find_packages
-from propane import __version__ as version
+from propane import version
+from propane.distribution import get_install_requirements, cmdclassdict
 
 PROJECT = 'propane'
 
@@ -102,41 +103,28 @@ def find_package_data(
 
 ################################################################################
 
-def get_install_requirements():
-    requirements = []
-    with open('requirements.txt') as file:
-        temp = file.readlines()
-        temp = [i[:-1] for i in temp]
-
-        for line in temp:
-            if line is None or line == '' or line.startswith(('#', '-e')):
-                continue
-            else:
-                requirements.append(line)
-        return requirements
-
-
 def get_readme():
     with open('README.md') as file:
         return file.read()
 
 setup(
     name=PROJECT,
-    version=version,
+    version=version.string,
     author='Tyler Butler',
     author_email='tyler@tylerbutler.com',
     platforms='any',
     packages=find_packages(),
     url='http://github.com/tylerbutler/propane',
     license='MIT',
-    description='A collection of somewhat random, helpful utility functions, data structures, ' \
+    description='A collection of somewhat random, helpful utility functions, data structures, '\
                 'Django fields, and other miscellany.',
     long_description=get_readme(),
     install_requires=get_install_requirements(),
     tests_require=('nose'),
+    cmdclass=cmdclassdict,
     include_package_data=True,
     package_data=find_package_data(PROJECT,
-        package=PROJECT,
-        only_in_packages=False),
+                                   package=PROJECT,
+                                   only_in_packages=False),
     zip_safe=True, # Setting to False doesn't create an egg - easier to debug and hack on
 )

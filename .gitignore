@@ -34,3 +34,4 @@ pip-log.txt
 ### PROPANE ###
 /docs
 /*.tar.gz
+_version.py

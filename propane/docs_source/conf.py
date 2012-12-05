@@ -51,13 +51,25 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-potpourri'
-copyright = u'2011, Tyler Butler'
+project = u'propane'
+copyright = u'2011-2012, Tyler Butler'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
+
+# force a version update
+from propane.distribution import update_version_py
+update_version_py(version_path=os.path.join(os.path.dirname(__file__), '..'))
+
+import propane.version
+# The short X.Y version.
+version = engineer.version
+# The full version, including alpha/beta/rc tags.
+release = engineer.version
+
+
 # The short X.Y version.
 version = '1.0'
 # The full version, including alpha/beta/rc tags.
