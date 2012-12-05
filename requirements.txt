@@ -1,1 +1,2 @@
-path.py
+path.py>=2.2.2
+translitcodec>=0.2
