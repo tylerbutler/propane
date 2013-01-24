@@ -12,9 +12,17 @@ def calc_sha(obj):
         pathfile = None
     sha = hashlib.sha256()
 
-    if pathfile and pathfile.exists():
-        return base64.b64encode(pathfile.read_hash('SHA256'))
-    elif isinstance(obj, basestring):
+    try:
+        if pathfile and pathfile.exists():
+            return base64.b64encode(pathfile.read_hash('SHA256'))
+    except TypeError:
+        # likely a bytestring
+        if isinstance(obj, basestring):
+            pass
+        else:
+            raise
+
+    if isinstance(obj, basestring):
         sha.update(obj)
     elif hasattr(obj, 'read'):
         while True:
