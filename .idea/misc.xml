@@ -19,6 +19,5 @@
   <component name="ProjectResources">
     <default-html-doctype>jar:file:\C:\Program Files (x86)\JetBrains\PyCharm 2.0.1\lib\pycharm.jar!\resources\html5-schema\html5.rnc</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.2 virtualenv at ~\.virtualenvs\propane" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.10 virtualenv at C:\Users\tylerbu\.virtualenvs\flask" project-jdk-type="Python SDK" />
 </project>
-
