@@ -3,6 +3,7 @@ import sys
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
+
 def get_class(class_string):
     """Given a string representing a path to a class, instantiates that class."""
     parts = class_string.split('.')

@@ -1,6 +1,7 @@
 # coding=utf-8
 import time
 from datetime import date
+
 from propane.distribution import version_class
 
 # This file is originally generated from Git information by running 'setup.py

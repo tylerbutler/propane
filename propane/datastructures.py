@@ -1,9 +1,10 @@
 # coding=utf-8
 from __future__ import absolute_import
-import itertools
 import collections
+import itertools
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 
 class CaseInsensitiveDict(collections.MutableMapping):
     """A dict whose keys are not case-sensitive."""
@@ -40,6 +41,8 @@ class CaseInsensitiveDict(collections.MutableMapping):
 # setonce class from Ian Bicking: http://blog.ianbicking.org/easy-readonly-attributes.html
 _setonce_count = itertools.count()
 
+
+# noinspection PyPep8Naming
 class setonce(object):
     """
     Allows an attribute to be set once (typically in __init__), but

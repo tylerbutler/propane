@@ -3,6 +3,7 @@ from path import path
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
+
 def ensure_path_exists(p):
     """
     Ensures a given path *p* exists.
@@ -14,5 +15,3 @@ def ensure_path_exists(p):
     else:
         path(p).makedirs_p()
     return p
-
-

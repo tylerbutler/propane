@@ -1,8 +1,11 @@
 # coding=utf-8
-import hashlib, base64
+import base64
+import hashlib
+
 from path import path
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 
 def calc_sha(obj):
     """Calculates the base64-encoded SHA hash of a file."""

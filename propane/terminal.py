@@ -2,6 +2,7 @@
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
+
 # from http://code.activestate.com/recipes/577058/
 def ask_yes_no(question, default="yes"):
     """
@@ -35,5 +36,4 @@ def ask_yes_no(question, default="yes"):
         elif choice in valid:
             return valid[choice]
         else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
+            sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")

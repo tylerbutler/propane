@@ -1,11 +1,14 @@
 # coding=utf-8
 from unittest import TestCase
+
 from path import path
+
 from propane.datastructures import CaseInsensitiveDict
 from propane.filetools import calc_sha
 from propane.strings import space_out_camel_case
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 
 class CaseInsensitiveDictTests(TestCase):
     def setUp(self):

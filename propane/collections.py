@@ -1,9 +1,9 @@
 # coding=utf-8
 from __future__ import absolute_import
 import collections
-from propane.datastructures import CaseInsensitiveDict  # merely for namespace convenience
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 
 def count_iterable(iter):
     return sum(1 for i in iter)
@@ -25,10 +25,10 @@ def update_additive(dict1, dict2):
     for key, value in dict2.items():
         if key not in dict1:
             dict1[key] = value
-        else: # key in dict1
+        else:  # key in dict1
             if isinstance(dict1[key], collections.Mapping):
                 assert isinstance(value, collections.Mapping)
                 update_additive(dict1[key], value)
-            else: # value is not a mapping type
+            else:  # value is not a mapping type
                 assert not isinstance(value, collections.Mapping)
                 dict1[key] = value

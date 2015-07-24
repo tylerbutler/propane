@@ -2,6 +2,7 @@
 import re
 from unicodedata import normalize
 
+
 def space_out_camel_case(stringAsCamelCase):
     """
     Adds spaces to a camel case string.  Failure to space out string returns the original string.
@@ -22,8 +23,10 @@ _available_unicode_handlers = []
 try:
     import translitcodec
 
+
     def _translit_handler(word):
         return word.encode('translit/long')
+
 
     _available_unicode_handlers.append(_translit_handler)
 except ImportError:
@@ -32,17 +35,22 @@ except ImportError:
 try:
     from unidecode import unidecode
 
+
     def _unidecode_handler(word):
         return unidecode(word)
+
 
     _available_unicode_handlers.append(_unidecode_handler)
 except ImportError:
     pass
 
+
 def _unicodedata_handler(word):
     return normalize('NFKD', word).encode('ascii', 'ignore')
 
+
 _available_unicode_handlers.append(_unicodedata_handler)
+
 
 def slugify(text, length_limit=0, delimiter=u'-'):
     """Generates an ASCII-only slug of a string."""
@@ -55,4 +63,3 @@ def slugify(text, length_limit=0, delimiter=u'-'):
     if length_limit > 0:
         return slug[0:length_limit]
     return slug
-
