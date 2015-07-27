@@ -1,0 +1,6 @@
+<action name="{{ action.name }}"
+    ext="{{ action.extension }}"
+    {% if default %}default="true"{% endif %}
+    {% if requires %}requires="{{ action.requires|join(",") }}"{% endif %}
+    urlsrc="{{ action.urlsrc }}"
+/>
