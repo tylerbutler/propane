@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wopi-discovery>
+    {% for zone in app.zones %}
+        <net-zone name="{{ zone }}">
+                <app name="{{ app.name }}" favIconUrl="{{ app.favicon_url }}"
+                     checkLicense="false">
+                    {% for action in app.actions_for_zone(zone) %}
+                        {{ action.xml }}
+                    {% endfor %}
+                </app>
+        </net-zone>
+    {% endfor %}
+</wopi-discovery>
