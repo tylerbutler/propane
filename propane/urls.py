@@ -1,13 +1,17 @@
 # coding=utf-8
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
+import posixpath
 from urllib import urlencode
-from urlparse import parse_qsl, urlsplit, urlunsplit
+
+# noinspection PyUnresolvedReferences
+from six.moves.urllib.parse import parse_qsl, urlsplit, urlunsplit
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
 try:
     # noinspection PyUnresolvedReferences
-    from propane.flask.urls import absolute_url_for, is_local_url
+    from propane.flask.urls import *
 except ImportError:
     pass
 
@@ -29,3 +33,9 @@ def remove_query_parameters(url, params=None, case_sensitive=False):
         query[:] = [(param, value) for param, value in query if not is_in(param, params, case_sensitive)]
         pieces[3] = urlencode(query, doseq=True)
     return urlunsplit(pieces)
+
+
+def urljoin(url1, *url2):
+    # This method is necessary because sometimes urlparse.urljoin simply doesn't work correctly
+    # when joining URL fragments.
+    return posixpath.join(url1, *url2)

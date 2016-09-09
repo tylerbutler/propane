@@ -1,12 +1,21 @@
 # coding=utf-8
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
 import collections
+from itertools import chain, islice
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
 
+def chunk(seq, chunksize, process=iter):
+    it = iter(seq)
+    while True:
+        yield process(chain([it.next()], islice(it, chunksize - 1)))
+
+
+# noinspection PyShadowingBuiltins
 def count_iterable(iter):
-    return sum(1 for i in iter)
+    return sum(1 for _ in iter)
 
 
 def update_additive(dict1, dict2):
@@ -32,3 +41,21 @@ def update_additive(dict1, dict2):
             else:  # value is not a mapping type
                 assert not isinstance(value, collections.Mapping)
                 dict1[key] = value
+
+
+def wrap_list(item):
+    """
+    Returns an object as a list.
+
+    If the object is a list, it is returned directly. If it is a tuple or set, it
+    is returned as a list. If it is another object, it is wrapped in a list and
+    returned.
+    """
+    if item is None:
+        return []
+    elif isinstance(item, list):
+        return item
+    elif isinstance(item, (tuple, set)):
+        return list(item)
+    else:
+        return [item]

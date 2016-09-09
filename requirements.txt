@@ -1,2 +1,4 @@
-path.py>=2.2.2
-translitcodec>=0.2
+path.py>=8.2.1
+setuptools_scm>=1.11.1
+six>=1.10.0
+translitcodec>=0.4.0

@@ -1,15 +1,21 @@
 # coding=utf-8
-from urlparse import urlsplit, urlunsplit
-from flask import request, url_for
+from __future__ import absolute_import, print_function
+
+# noinspection PyPackageRequirements,PyUnresolvedReferences
+from six.moves.urllib.parse import urlsplit
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
+try:
+    # noinspection PyPackageRequirements,PyUnresolvedReferences
+    from flask import request, url_for
+except ImportError:
+    print("Flask is required but cannot be imported.")
+    raise
+
 
 def absolute_url_for(view, **kwargs):
-    relative_url = url_for(view, **kwargs)
-    relative_url_pieces = list(urlsplit(relative_url))
-    relative_url_pieces[0], relative_url_pieces[1], _, _, _ = urlsplit(request.url_root)
-    absolute_url = urlunsplit(relative_url_pieces)
+    absolute_url = url_for(view, _external=True, **kwargs)
     return absolute_url
 
 

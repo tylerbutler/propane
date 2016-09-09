@@ -1,15 +1,9 @@
 # coding=utf-8
-import os
+from __future__ import absolute_import, print_function
+
+from setuptools_scm import get_version
+
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
-try:
-    from propane._version import version
-except ImportError:
-    from propane.distribution import update_version_py
-
-    update_version_py(version_path=os.path.dirname(__file__))
-    try:
-        from propane._version import version
-    except ImportError:
-        raise
+version = get_version(root='..', relative_to=__file__)

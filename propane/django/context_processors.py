@@ -1,6 +1,8 @@
 # coding=utf-8
+from __future__ import absolute_import, print_function
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 
 def context_overload(request):
     """
@@ -21,8 +23,9 @@ def context_overload(request):
             }
     """
     try:
+        # noinspection PyPackageRequirements,PyUnresolvedReferences
         from django.conf import settings
     except ImportError:
-        print "Django is required but cannot be imported."
+        print("Django is required but cannot be imported.")
         raise
     return settings.PROPANE_CONTEXT_OVERLOAD

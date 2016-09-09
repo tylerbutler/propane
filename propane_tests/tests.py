@@ -1,8 +1,9 @@
 # coding=utf-8
+from __future__ import absolute_import, print_function
+
 from unittest import TestCase
 
-from path import path
-
+from path import Path
 from propane.datastructures import CaseInsensitiveDict
 from propane.filetools import calc_sha
 from propane.strings import space_out_camel_case
@@ -39,8 +40,8 @@ class CaseInsensitiveDictTests(TestCase):
 
 class FileToolsTests(TestCase):
     def setUp(self):
-        self.text_file = path(__file__).dirname() / 'data/sample_file.txt'
-        self.pdf_file = path(__file__).dirname() / 'data/pdf.pdf'
+        self.text_file = Path(__file__).dirname() / 'data/sample_file.txt'
+        self.pdf_file = Path(__file__).dirname() / 'data/pdf.pdf'
 
     def file_test(self):
         sha = calc_sha(self.text_file)

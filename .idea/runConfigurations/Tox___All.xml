@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tox - All" type="Tox" factoryName="Tox" singleton="true">
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs />
+    <option name="SDK_HOME" value="C:\Users\tyler\.virtualenvs\propane\Scripts\python.exe" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="IS_MODULE_SDK" value="false" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+    <i>
+      <array />
+    </i>
+    <h>
+      <array />
+    </h>
+    <module name="propane" />
+    <method />
+  </configuration>
+</component>

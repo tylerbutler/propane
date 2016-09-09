@@ -1,8 +1,11 @@
 # coding=utf-8
+from __future__ import absolute_import, print_function
+
 import base64
 import hashlib
 
-from path import path
+from path import Path
+from six import string_types
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
@@ -10,7 +13,7 @@ __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 def calc_sha(obj):
     """Calculates the base64-encoded SHA hash of a file."""
     try:
-        pathfile = path(obj)
+        pathfile = Path(obj)
     except UnicodeDecodeError:
         pathfile = None
     sha = hashlib.sha256()
@@ -20,12 +23,12 @@ def calc_sha(obj):
             return base64.b64encode(pathfile.read_hash('SHA256'))
     except TypeError:
         # likely a bytestring
-        if isinstance(obj, basestring):
+        if isinstance(obj, string_types):
             pass
         else:
             raise
 
-    if isinstance(obj, basestring):
+    if isinstance(obj, string_types):
         sha.update(obj)
     elif hasattr(obj, 'read'):
         while True:

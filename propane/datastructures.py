@@ -1,12 +1,13 @@
 # coding=utf-8
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
 import collections
 import itertools
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
-
 try:
+    # noinspection PyPackageRequirements
     # Use the implementation from the requests module if it's available (it's better)
     from requests.models import CaseInsensitiveDict
 except ImportError:
@@ -41,12 +42,11 @@ except ImportError:
         def actual_key_case(self, key):
             return self._s.get(key.lower())
 
-
 # setonce class from Ian Bicking: http://blog.ianbicking.org/easy-readonly-attributes.html
 _setonce_count = itertools.count()
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyShadowingBuiltins
 class setonce(object):
     """
     Allows an attribute to be set once (typically in __init__), but
@@ -96,7 +96,7 @@ class setonce(object):
         except AttributeError:
             setattr(obj, self._name, value)
         else:
-            raise AttributeError, "Attribute already set"
+            raise AttributeError("Attribute already set")
 
     def set(self, obj, value):
         setattr(obj, self._name, value)

@@ -1,8 +1,13 @@
 # coding=utf-8
+from __future__ import absolute_import, print_function
+
 import re
 from unicodedata import normalize
 
+from six import u
 
+
+# noinspection PyPep8Naming
 def space_out_camel_case(stringAsCamelCase):
     """
     Adds spaces to a camel case string.  Failure to space out string returns the original string.
@@ -21,6 +26,7 @@ def space_out_camel_case(stringAsCamelCase):
 _punctuation_regex = re.compile(r'[\t :!"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 _available_unicode_handlers = []
 try:
+    # noinspection PyUnresolvedReferences
     import translitcodec
 
 
@@ -33,6 +39,7 @@ except ImportError:
     pass
 
 try:
+    # noinspection PyPackageRequirements,PyUnresolvedReferences
     from unidecode import unidecode
 
 
@@ -59,7 +66,7 @@ def slugify(text, length_limit=0, delimiter=u'-'):
         word = _available_unicode_handlers[0](word)
         if word:
             result.append(word)
-    slug = unicode(delimiter.join(result))
+    slug = u(delimiter.join(result))
     if length_limit > 0:
         return slug[0:length_limit]
     return slug

@@ -1,22 +1,28 @@
 # coding=utf-8
-from copy import deepcopy
+from __future__ import absolute_import, print_function
+
 from base64 import b64encode, b64decode
+from copy import deepcopy
 from zlib import compress, decompress
 
+__author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
 try:
-    from cPickle import loads, dumps
+    from six.moves.cPickle import loads, dumps
 except ImportError:
     from pickle import loads, dumps
 
 try:
+    # noinspection PyPackageRequirements,PyUnresolvedReferences
     from django.db import models
+    # noinspection PyPackageRequirements,PyUnresolvedReferences
     from django.utils.encoding import force_unicode
 except ImportError:
-    print "Django is required but cannot be imported."
+    print("Django is required but cannot be imported.")
     raise
 
-# from http://djangosnippets.org/snippets/1694/
 
+# from http://djangosnippets.org/snippets/1694/
 class PickledObject(str):
     """
     A subclass of string so it can be told whether a string is a pickled
@@ -99,6 +105,7 @@ class PickledObjectField(models.Field):
             # If the field doesn't have a default, then we punt to models.Field.
         return super(PickledObjectField, self).get_default()
 
+    # noinspection PyBroadException
     def to_python(self, value):
         """
         B64decode and unpickle the object, optionally decompressing it.
@@ -144,6 +151,7 @@ class PickledObjectField(models.Field):
         value = self._get_val_from_obj(obj)
         return self.get_db_prep_value(value)
 
+    # noinspection PyMethodMayBeStatic
     def get_internal_type(self):
         return 'TextField'
 

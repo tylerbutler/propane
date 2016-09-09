@@ -1,4 +1,8 @@
 # coding=utf-8
+from __future__ import absolute_import, print_function
+
+# noinspection PyUnresolvedReferences
+from six.moves import input
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
@@ -30,7 +34,7 @@ def ask_yes_no(question, default="yes"):
 
     while True:
         sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
+        choice = input().lower()
         if default is not None and choice == '':
             return valid[default]
         elif choice in valid:

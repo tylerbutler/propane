@@ -1,7 +1,8 @@
 include *.txt *.py *.md *.markdown
 recursive-include propane *.*
 
-prune docs
+prune .idea
 prune .tox
+prune docs
 
 global-exclude *.pyc
