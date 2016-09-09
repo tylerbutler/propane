@@ -1,8 +1,9 @@
 # coding=utf-8
 from __future__ import absolute_import, print_function
 
-import collections
+from collections import Mapping, MutableMapping, Iterable
 from itertools import chain, islice
+from six import iteritems, string_types
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
@@ -35,11 +36,11 @@ def update_additive(dict1, dict2):
         if key not in dict1:
             dict1[key] = value
         else:  # key in dict1
-            if isinstance(dict1[key], collections.Mapping):
-                assert isinstance(value, collections.Mapping)
+            if isinstance(dict1[key], Mapping):
+                assert isinstance(value, Mapping)
                 update_additive(dict1[key], value)
             else:  # value is not a mapping type
-                assert not isinstance(value, collections.Mapping)
+                assert not isinstance(value, Mapping)
                 dict1[key] = value
 
 
@@ -59,3 +60,54 @@ def wrap_list(item):
         return list(item)
     else:
         return [item]
+
+
+def flatten_dict(d, parent_key='', separator='_'):
+    """
+    Flattens any nested dict-like object into a non-nested form.
+
+    The resulting dict will have keys of the form ``k1_nestedk2_nestedk3`` for nested keys. You can change the
+    separator by passing in a value to ``separator``.
+
+    Example::
+
+        >>> d = { 'a': 1,
+        ...       'b': { 'a': 2,
+        ...              'b': 3 },
+        ...       'c': { 'a': 4,
+        ...              'b': { 'a': 5,
+        ...                     'b': 6 },
+        ...              'c': { 'a': 7 }
+        ...            }
+        ...     }
+        >>> flatten_dict(d) == {'a': 1, 'b_a': 2, 'b_b': 3, 'c_a': 4, 'c_b_a': 5, 'c_b_b': 6, 'c_c_a': 7}
+        True
+    """
+    items = []
+    for k, v in iteritems(d):
+        new_key = parent_key + separator + k if parent_key else k
+        if isinstance(v, MutableMapping):
+            items.extend(flatten_dict(v, new_key).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
+def flatten_iterable(l):
+    """
+    Flattens a nested iterable into a single layer. Generator.
+
+    Example::
+
+        >>> nested_iterable = (('t1', 't2'), ['l1', 'l2', ('l1', 'l2')])
+        >>> list(flatten_iterable(nested_iterable))
+        ['t1', 't2', 'l1', 'l2', 'l1', 'l2']
+        >>> set(flatten_iterable(nested_iterable)) == {'t1', 't2', 'l1', 'l2'}
+        True
+    """
+    for el in l:
+        if isinstance(el, Iterable) and not isinstance(el, string_types):
+            for sub in flatten_iterable(el):
+                yield sub
+        else:
+            yield el
