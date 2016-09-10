@@ -2,12 +2,34 @@
 from __future__ import absolute_import, print_function
 
 import errno
+import filecmp
+import logging
 
 from path import Path
 from propane.collections import wrap_list
 
 
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
+
+
+def diff_dir(dir_cmp, left_path=True):
+    """
+    A generator that, given a ``filecmp.dircmp`` object, yields the paths to all files that are different. Works
+    recursively.
+
+    :param dir_cmp: A ``filecmp.dircmp`` object representing the comparison.
+    :param left_path: If ``True``, paths will be relative to dircmp.left. Else paths will be relative to dircmp.right.
+    """
+    for name in dir_cmp.diff_files:
+        if left_path:
+            path_root = dir_cmp.left
+        else:
+            path_root = dir_cmp.right
+        yield Path.joinpath(path_root, name)
+    for sub in dir_cmp.subdirs.values():
+        # Need to iterate over the recursive call to make sure the individual values are yielded up the stack
+        for the_dir in diff_dir(sub, left_path):
+            yield the_dir
 
 
 def ensure_exists(p, assume_dirs=False):
@@ -76,3 +98,89 @@ def has_files(the_path):
             return False
         else:
             raise
+
+
+def mirror_folder(source, target, delete_orphans=True, recurse=True, ignore_list=None, _level=0, logger=None):
+    """Mirrors a folder *source* into a target folder *target*."""
+
+    logger = logger or logging.getLogger(__name__)
+
+    def expand_tree(p):
+        tree = []
+        for node in Path(p).walk():
+            tree.append(node)
+        return tree
+
+    report = {
+        'deleted': set([]),
+        'overwritten': set([]),
+        'new': set([])
+    }
+    d1 = source
+    d2 = target
+    logger.debug("Mirroring %s ==> %s" % (d1, d2))
+    if not d2.exists():
+        d2.makedirs()
+    compare = filecmp.dircmp(d1, d2)
+
+    # Expand the ignore list to be full paths
+    if ignore_list is None:
+        ignore_list = []
+    else:
+        ignore_list = [Path(d2 / i).normpath() for i in ignore_list]
+        ignore_files = [f for f in ignore_list if f.isfile()]
+        ignore_list.extend(expand_path(ignore_files, root_path=d2))
+
+    # Delete orphan files/folders in the target folder
+    if delete_orphans:
+        for item in compare.right_only:
+            fullpath = Path(d2 / item).normpath()
+            if fullpath in ignore_list:
+                logger.debug(
+                    "%s ==> Ignored - path is in ignore list" % fullpath)
+                continue
+
+            if fullpath.isdir() and recurse:
+                logger.debug(
+                    "%s ==> Deleted - doesn't exist in source" % fullpath)
+                report['deleted'].add(fullpath)
+                if len(fullpath.listdir()) > 0:
+                    report['deleted'].update(expand_tree(fullpath))
+
+                # noinspection PyArgumentList
+                fullpath.rmtree()
+            elif fullpath.isfile():
+                logger.debug(
+                    "%s ==> Deleted - doesn't exist in source" % fullpath)
+                report['deleted'].add(fullpath)
+                fullpath.remove()
+
+    # Copy new files and folders from the source to the target
+    for item in compare.left_only:
+        fullpath = d1 / item
+        if fullpath.isdir() and recurse:
+            logger.debug(
+                "Copying new directory %s ==> %s" % (fullpath, (d2 / item)))
+            fullpath.copytree(d2 / item)
+            report['new'].add(d2 / item)
+            report['new'].update(expand_tree(d2 / item))
+        elif fullpath.isfile():
+            logger.debug("Copying new file %s ==> %s" % (fullpath, (d2 / item)))
+            fullpath.copy2(d2)
+            report['new'].add(d2 / item)
+
+    # Copy modified files in the source to the target, overwriting the target file
+    for item in compare.diff_files:
+        logger.debug(
+            "Overwriting existing file %s ==> %s" % ((d1 / item), (d2 / item)))
+        (d1 / item).copy2(d2)
+        report['overwritten'].add(d2 / item)
+
+    # Recurse into subfolders that exist in both the source and target
+    if recurse:
+        for item in compare.common_dirs:
+            rpt = mirror_folder(d1 / item, d2 / item, delete_orphans, _level=_level + 1)
+            report['new'].update(rpt['new'])
+            report['overwritten'].update(rpt['overwritten'])
+            report['deleted'].update(rpt['deleted'])
+    return report

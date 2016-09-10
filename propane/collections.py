@@ -14,9 +14,8 @@ def chunk(seq, chunksize, process=iter):
         yield process(chain([it.next()], islice(it, chunksize - 1)))
 
 
-# noinspection PyShadowingBuiltins
-def count_iterable(iter):
-    return sum(1 for _ in iter)
+def count_iterable(iterable):
+    return sum(1 for _ in iterable)
 
 
 def update_additive(dict1, dict2):

@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function
 import collections
 import itertools
 
+
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
 
 try:
@@ -41,6 +42,25 @@ except ImportError:
 
         def actual_key_case(self, key):
             return self._s.get(key.lower())
+
+
+class Borg(object):
+    """
+    A class that shares state among all instances of the class.
+
+    There seem to be a lot of differing opinions about whether this design
+    pattern is A Good Idea (tm) or not. It definitely seems better than
+    Singletons since it enforces *behavior*, not *structure*,
+    but it's also possible there's a better way to do it in Python with
+    judicious use of globals.
+    """
+    _state = {}
+
+    def __new__(cls, *p, **k):
+        self = object.__new__(cls)
+        self.__dict__ = cls._state
+        return self
+
 
 # setonce class from Ian Bicking: http://blog.ianbicking.org/easy-readonly-attributes.html
 _setonce_count = itertools.count()

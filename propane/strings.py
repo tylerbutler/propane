@@ -4,8 +4,6 @@ from __future__ import absolute_import, print_function
 import re
 from unicodedata import normalize
 
-from six import u
-
 
 # noinspection PyPep8Naming
 def space_out_camel_case(stringAsCamelCase):
@@ -66,7 +64,7 @@ def slugify(text, length_limit=0, delimiter=u'-'):
         word = _available_unicode_handlers[0](word)
         if word:
             result.append(word)
-    slug = u(delimiter.join(result))
+    slug = delimiter.join(result)
     if length_limit > 0:
         return slug[0:length_limit]
     return slug
