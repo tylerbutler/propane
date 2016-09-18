@@ -4,5 +4,6 @@ recursive-include propane *.*
 prune .idea
 prune .tox
 prune docs
+prune propane/docs_source/build
 
 global-exclude *.pyc
