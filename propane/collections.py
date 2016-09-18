@@ -1,21 +1,12 @@
 # coding=utf-8
 from __future__ import absolute_import, print_function
 
-from collections import Mapping, MutableMapping, Iterable
-from itertools import chain, islice
+from collections import Iterable, Mapping, MutableMapping
+
 from six import iteritems, string_types
 
+
 __author__ = 'Tyler Butler <tyler@tylerbutler.com>'
-
-
-def chunk(seq, chunksize, process=iter):
-    it = iter(seq)
-    while True:
-        yield process(chain([it.next()], islice(it, chunksize - 1)))
-
-
-def count_iterable(iterable):
-    return sum(1 for _ in iterable)
 
 
 def update_additive(dict1, dict2):
@@ -92,9 +83,11 @@ def flatten_dict(d, parent_key='', separator='_'):
     return dict(items)
 
 
-def flatten_iterable(l):
+def flatten_iterable(iterable):
     """
     Flattens a nested iterable into a single layer. Generator.
+
+    If you only want to flatten a single level, use more_itertools.flatten.
 
     Example::
 
@@ -104,9 +97,9 @@ def flatten_iterable(l):
         >>> set(flatten_iterable(nested_iterable)) == {'t1', 't2', 'l1', 'l2'}
         True
     """
-    for el in l:
-        if isinstance(el, Iterable) and not isinstance(el, string_types):
-            for sub in flatten_iterable(el):
+    for item in iterable:
+        if isinstance(item, Iterable) and not isinstance(item, string_types):
+            for sub in flatten_iterable(item):
                 yield sub
         else:
-            yield el
+            yield item

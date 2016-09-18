@@ -4,7 +4,6 @@ from __future__ import absolute_import, print_function
 from unittest import TestCase
 
 from path import Path
-from propane.collections import chunk
 from propane.datastructures import CaseInsensitiveDict
 from propane.filetools import calc_sha
 from propane.strings import space_out_camel_case
@@ -96,13 +95,3 @@ class UrlsTests(TestCase):
     def test_strip_duplicates(self):
         result = remove_query_parameters(self.dupe_url, ['query1'])
         self.assertEqual(result, 'http://www.tylerbutler.com/test?query2=arg2&query3=arg3')
-
-
-class CollectionsTest(TestCase):
-    def test_chunk(self):
-        l = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        iter_count = 0
-        for c in chunk(l, 2, list):
-            iter_count += 1
-            print('chunk {0}: {1}'.format(iter_count, c))
-        self.assertEqual(0, 0)
